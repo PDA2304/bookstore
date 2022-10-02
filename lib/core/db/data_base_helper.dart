@@ -17,7 +17,7 @@ class DataBaseHelper {
   late final Database? dataBase;
   late final Directory? _appDocumentDirectory;
   late final String? _pathDB;
-  final int _version = 3;
+  final int _version = 8;
 
   /// Функция иницилизации базы данных
   Future<void> init() async {
@@ -52,13 +52,12 @@ class DataBaseHelper {
   /// Функция для обновлении таблиц
   Future<void> onUpdateTable(Database db) async {
     var tables = await db.rawQuery('SELECT name  FROM sqlite_master;');
-    for (var table in DataBaseRequest.tableList) {
-      DataBaseRequest.deleteTable(table);
+    for (var table in DataBaseRequest.tableList.reversed) {
+      if (tables.where((element) => element['name'] == table).isNotEmpty)
+        await db.execute(DataBaseRequest.deleteTable(table));
     }
     for (var i = 0; i < DataBaseRequest.tableList.length; i++) {
-      if (tables
-          .where((element) => element['name'] == DataBaseRequest.tableList[i])
-          .isEmpty) await db.execute(DataBaseRequest.tableCreateList[i]);
+      await db.execute(DataBaseRequest.tableCreateList[i]);
     }
     await onInitTable(db);
   }
