@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bookstore/common/data_base_request.dart';
 import 'package:bookstore/data/model/role.dart';
+import 'package:bookstore/data/model/users.dart';
+import 'package:bookstore/domain/entity/role_entity.dart';
 import "package:path/path.dart";
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:sqflite/sqflite.dart';
@@ -17,7 +19,7 @@ class DataBaseHelper {
   late final Database? dataBase;
   late final Directory? _appDocumentDirectory;
   late final String? _pathDB;
-  final int _version = 8;
+  final int _version = 13;
 
   /// Функция иницилизации базы данных
   Future<void> init() async {
@@ -53,19 +55,20 @@ class DataBaseHelper {
   Future<void> onUpdateTable(Database db) async {
     var tables = await db.rawQuery('SELECT name  FROM sqlite_master;');
     for (var table in DataBaseRequest.tableList.reversed) {
-      if (tables.where((element) => element['name'] == table).isNotEmpty)
+      if (tables.where((element) => element['name'] == table).isNotEmpty) {
         await db.execute(DataBaseRequest.deleteTable(table));
+      }
     }
-    for (var i = 0; i < DataBaseRequest.tableList.length; i++) {
-      await db.execute(DataBaseRequest.tableCreateList[i]);
+    for (var createTable in DataBaseRequest.tableCreateList) {
+      await db.execute(createTable);
     }
     await onInitTable(db);
   }
 
   /// Функция создания таблиц
   Future<void> onCreateTable(Database db) async {
-    for (var i = 0; i < DataBaseRequest.tableList.length; i++) {
-      await db.execute(DataBaseRequest.tableCreateList[i]);
+    for (var createTable in DataBaseRequest.tableCreateList) {
+      await db.execute(createTable);
     }
     await onInitTable(db);
   }
@@ -74,6 +77,14 @@ class DataBaseHelper {
     try {
       db.insert(DataBaseRequest.tableRole, Role(role: 'Администратор').toMap());
       db.insert(DataBaseRequest.tableRole, Role(role: 'Пользователь').toMap());
+      db.insert(
+        DataBaseRequest.tableUsers,
+        Users(
+          login: 'admin',
+          password: 'admin123',
+          idRole: RoleEnum.admin,
+        ).toMap(),
+      );
     } on DatabaseException catch (e) {}
   }
 

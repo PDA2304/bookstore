@@ -71,11 +71,11 @@ abstract class DataBaseRequest {
 
   /// Запрос для создания таблицы Users
   static const String _createTableUsers =
-      'CREATE TABLE "$tableUsers" ("id"	INTEGER,"login"	TEXT NOT NULL UNIQUE,"password"	TEXT NOT NULL,"id_role"	INTEGER,FOREIGN KEY("id_role") REFERENCES "Role"("id"),PRIMARY KEY("id"))';
+      'CREATE TABLE "$tableUsers" ("id"	INTEGER,"login"	TEXT NOT NULL UNIQUE,"password"	TEXT NOT NULL,"id_role"	INTEGER,FOREIGN KEY("id_role") REFERENCES "Role"("id") ON DELETE CASCADE,PRIMARY KEY("id" AUTOINCREMENT) )';
 
   /// Запрос для создания таблицы ProfileUsers
   static const String _createTableProfileUsers =
-      'CREATE TABLE "$tableProfileUsers" ("id"	INTEGER, "surname"	TEXT, "name"	INTEGER, "midle_name"	INTEGER, "sex"	INTEGER, "user_id"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT),	FOREIGN KEY("user_id") REFERENCES "$tableUsers"("id"))';
+      'CREATE TABLE "$tableProfileUsers" ("id"	INTEGER, "surname"	TEXT, "name"	INTEGER, "midle_name"	INTEGER, "sex"	INTEGER, "user_id"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT),	FOREIGN KEY("user_id") REFERENCES "$tableUsers"("id") ON DELETE CASCADE)';
 
   /// Запрос для создания таблицы Author
   static const String _createTableAuthor =
@@ -83,7 +83,7 @@ abstract class DataBaseRequest {
 
   /// Запрос для создания таблицы Books
   static const String _createTableBooks =
-      'CREATE TABLE "$tableBooks" ("id" INTEGER, "name"	TEXT, "description"	TEXT, "date" TEXT, "id_author" INTEGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("id_author") REFERENCES "$tableAuthor"("id"))';
+      'CREATE TABLE "$tableBooks" ("id" INTEGER, "name"	TEXT, "description"	TEXT, "date" TEXT, "id_author" INTEGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("id_author") REFERENCES "$tableAuthor"("id") ON DELETE CASCADE )';
 
   /// Запрос для создания таблицы Genres
   static const String _createTableBooksGenres = '';
