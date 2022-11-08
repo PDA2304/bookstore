@@ -75,7 +75,7 @@ abstract class DataBaseRequest {
 
   /// Запрос для создания таблицы ProfileUsers
   static const String _createTableProfileUsers =
-      'CREATE TABLE "$tableProfileUsers" ("id"	INTEGER, "surname"	TEXT, "name"	INTEGER, "midle_name"	INTEGER, "sex"	INTEGER, "user_id"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT),	FOREIGN KEY("user_id") REFERENCES "$tableUsers"("id") ON DELETE CASCADE)';
+      'CREATE TABLE "$tableProfileUsers" ("id"	INTEGER, "surname"	TEXT, "name"	INTEGER, "midle_name"	INTEGER, "sex"	INTEGER, "user_id"	INTEGER UNIQUE, PRIMARY KEY("id" AUTOINCREMENT),	FOREIGN KEY("user_id") REFERENCES "$tableUsers"("id") ON DELETE CASCADE)';
 
   /// Запрос для создания таблицы Author
   static const String _createTableAuthor =

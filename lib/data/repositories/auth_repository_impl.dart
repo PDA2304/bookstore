@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AuthRepositoryImlp implements AuthRepositories {
-  final _db = DataBaseHelper.instance.dataBase!;
+  final _db = DataBaseHelper.instance.dataBase;
 
   @override
   String get table => DataBaseRequest.tableUsers;

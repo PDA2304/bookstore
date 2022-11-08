@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bookstore/data/repositories/users_repository_impl.dart';
+import 'package:bookstore/data/repositories/user_repository_impl.dart';
 import 'package:bookstore/domain/entity/role_entity.dart';
 import 'package:bookstore/domain/entity/users_entity.dart';
-import 'package:bookstore/domain/usercases/users.dart';
+import 'package:bookstore/domain/usercases/user.dart';
 import 'package:flutter/material.dart';
 
 part 'users_state.dart';
@@ -10,7 +10,7 @@ part 'users_state.dart';
 class UsersCubit extends Cubit<UsersState> {
   UsersCubit() : super(UsersInitial());
 
-  final UsersRepositoryImpl _usersRepositoryImpl = UsersRepositoryImpl();
+  final UserRepositoryImpl _usersRepositoryImpl = UserRepositoryImpl();
   late Users _users;
 
   List<UsersEnity> list = [];
@@ -23,8 +23,17 @@ class UsersCubit extends Cubit<UsersState> {
     emit(UsersLoaded(list));
   }
 
-  void add(String login, String password, RoleEnum role,
-      BuildContext context) async {
+  Future<void> refresh() async {
+    list = await _users.getAll();
+    emit(UsersLoaded(list));
+  }
+
+  void add(
+    String login,
+    String password,
+    RoleEnum role,
+    BuildContext context,
+  ) async {
     var result = await _users.insert(UsersEnity(
       login: login,
       password: password,
@@ -48,5 +57,18 @@ class UsersCubit extends Cubit<UsersState> {
         Navigator.pop(context);
       },
     );
+  }
+
+  void delete(int index) async {
+    await _users.delete(
+      UsersEnity(
+        id: list[index].id,
+        login: list[index].login,
+        idRole: list[index].idRole,
+      ),
+    );
+    list.removeAt(index);
+
+    emit(UsersLoaded(list));
   }
 }

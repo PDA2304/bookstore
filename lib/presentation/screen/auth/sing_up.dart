@@ -16,7 +16,7 @@ class _SignUpState extends State<SignUp> {
 
   TextEditingController _loginController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  bool isObscure = false;
+  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,13 @@ class _SignUpState extends State<SignUp> {
       password: _passwordController.text,
     ));
 
-    result.fold((l) => print(l.errorMessage), (r) {
+    result.fold((l) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l.errorMessage),
+        ),
+      );
+    }, (r) {
       Navigator.pushNamed(context, 'admin');
     });
   }

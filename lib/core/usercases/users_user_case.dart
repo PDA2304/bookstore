@@ -5,5 +5,5 @@ abstract class UsersUserCase<Type, Params> {
   Future<List<Params>> get(Params params);
   Future<List<Params>> getAll();
   Future<Either<Type, Params>> update(Params params);
-  Future<Either<Type, Params>> delete(Params params);
+  Future<Either<Type, bool>> delete(Params params);
 }

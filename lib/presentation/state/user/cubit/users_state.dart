@@ -12,3 +12,10 @@ class UsersLoaded extends UsersState {
 
   UsersLoaded(this.list);
 }
+
+
+class UserDelete extends UsersState{
+  final List<UsersEnity> list;
+
+  UserDelete(this.list);
+}

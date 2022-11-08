@@ -16,21 +16,21 @@ class DataBaseHelper {
 
   DataBaseHelper._instance();
 
-  late final Database? dataBase;
-  late final Directory? _appDocumentDirectory;
-  late final String? _pathDB;
-  final int _version = 13;
+  late final Database dataBase;
+  late final Directory _appDocumentDirectory;
+  late final String _pathDB;
+  final int _version = 14;
 
   /// Функция иницилизации базы данных
   Future<void> init() async {
     _appDocumentDirectory =
         await path_provider.getApplicationDocumentsDirectory();
-    _pathDB = join(_appDocumentDirectory!.path, 'boockstore.db');
+    _pathDB = join(_appDocumentDirectory.path, 'boockstore.db');
 
     if (Platform.isWindows || Platform.isLinux) {
       sqfliteFfiInit();
       dataBase = await databaseFactoryFfi.openDatabase(
-        _pathDB!,
+        _pathDB,
         options: OpenDatabaseOptions(
           version: _version,
           onUpgrade: (db, oldVersion, newVersion) async =>
@@ -42,8 +42,9 @@ class DataBaseHelper {
       );
     } else {
       dataBase = await openDatabase(
-        _pathDB!,
+        _pathDB,
         version: _version,
+        onUpgrade: (db, oldVersion, newVersion) => onUpdateTable(db),
         onCreate: (db, version) async {
           await onCreateTable(db);
         },
@@ -90,11 +91,11 @@ class DataBaseHelper {
 
   /// Функция удаления базы данных
   Future<void> onDropDataBase() async {
-    dataBase!.close();
+    dataBase.close();
     if (Platform.isWindows) {
-      databaseFactoryFfi.deleteDatabase(_pathDB!);
+      databaseFactoryFfi.deleteDatabase(_pathDB);
     } else {
-      deleteDatabase(_pathDB!);
+      deleteDatabase(_pathDB);
     }
   }
 }

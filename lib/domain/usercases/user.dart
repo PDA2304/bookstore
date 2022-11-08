@@ -5,14 +5,13 @@ import 'package:bookstore/domain/repositories/users_repositories.dart';
 import 'package:dartz/dartz.dart';
 
 class Users implements UsersUserCase<Failure, UsersEnity> {
-  final UsersRepositories usersRepositories;
+  final UserRepositories usersRepositories;
 
   Users(this.usersRepositories);
 
   @override
-  Future<Either<Failure, UsersEnity>> delete(UsersEnity params) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> delete(UsersEnity params) async {
+    return await usersRepositories.delete(params.id);
   }
 
   @override

@@ -4,11 +4,13 @@ import 'package:bookstore/domain/entity/users_entity.dart';
 
 class Users extends UsersEnity {
   final String password;
+
   Users({
     super.id = 0,
     required super.login,
     required super.idRole,
     required this.password,
+    
   });
 
   Map<String, dynamic> toMap() {

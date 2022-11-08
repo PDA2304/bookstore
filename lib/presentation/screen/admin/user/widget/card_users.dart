@@ -1,16 +1,18 @@
 import 'package:bookstore/domain/entity/role_entity.dart';
 import 'package:flutter/material.dart';
 
-class CardUsers extends StatelessWidget {
-  CardUsers({
+class CardUser extends StatelessWidget {
+  const CardUser({
     super.key,
     required this.id,
     required this.login,
-    required this.idRole,
+    required this.idRole, 
+    required this.onTap,
   });
   final int id;
   final String login;
   final RoleEnum idRole;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class CardUsers extends StatelessWidget {
       borderRadius: BorderRadius.circular(5),
       highlightColor: Colors.indigo[400],
       focusColor: Colors.indigo[200],
-      onTap: () {},
+      onTap: () => onTap,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
